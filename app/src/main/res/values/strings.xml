@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Spotify Bridge App</string>
+    <string name="stop_stream">Stop Stream</string>
+</resources>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "646491283432",
+    "firebase_url": "https://spotifybridgeapp.firebaseio.com",
+    "project_id": "spotifybridgeapp",
+    "storage_bucket": "spotifybridgeapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646491283432:android:00568cd1de8b7aba",
+        "android_client_info": {
+          "package_name": "volume.jukebox.spotifybridgeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "646491283432-pnfknr1e0b72jc932evsqngk5sbug06h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "volume.jukebox.spotifybridgeapp",
+            "certificate_hash": "5b777176a4aff6413788de1bbbb4bbbeb4d2c989"
+          }
+        },
+        {
+          "client_id": "646491283432-eutp952u7fa1p2pci07iijmjpfo1d53f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKe95O2ZPg2D8MNCfC4OR8mAemtJoyEVs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "646491283432-eutp952u7fa1p2pci07iijmjpfo1d53f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
