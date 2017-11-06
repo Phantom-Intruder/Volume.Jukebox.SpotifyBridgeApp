@@ -26,13 +26,13 @@ public class HttpClient {
     public static JSONObject get(URL url) {
 
         try {
-            HttpURLConnection client = getClient(url);
+            HttpURLConnection       client              = getClient(url);
 
-            int responseCode = client.getResponseCode();
+            int                     responseCode        = client.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
-                InputStream in = new BufferedInputStream(client.getInputStream());
-                String inString = new Scanner(in).useDelimiter("\\A").next();
+                InputStream         in                  = new BufferedInputStream(client.getInputStream());
+                String              inString            = new Scanner(in).useDelimiter("\\A").next();
 
                 return new JSONObject(inString);
             }
@@ -48,13 +48,13 @@ public class HttpClient {
     public static JSONArray getList(URL url) {
 
         try {
-            HttpURLConnection client = getClient(url);
+            HttpURLConnection       client              = getClient(url);
 
-            int responseCode = client.getResponseCode();
+            int                     responseCode        = client.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
-                InputStream in = new BufferedInputStream(client.getInputStream());
-                String responseString = new Scanner(in).useDelimiter("\\A").next();
+                InputStream         in                   = new BufferedInputStream(client.getInputStream());
+                String              responseString       = new Scanner(in).useDelimiter("\\A").next();
 
                 Log.e("GetResponse", responseString);
                 return new JSONArray(responseString);
@@ -71,13 +71,13 @@ public class HttpClient {
     public static JSONObject post(URL url, JSONObject data) throws IOException {
 
         try {
-            HttpURLConnection client = postClient(url, data);
+            HttpURLConnection       client              = postClient(url, data);
 
-            int responseCode = client.getResponseCode();
+            int                     responseCode        = client.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
-                InputStream in = new BufferedInputStream(client.getInputStream());
-                String responseString = new Scanner(in).useDelimiter("\\A").next();
+                InputStream         in                  = new BufferedInputStream(client.getInputStream());
+                String              responseString      = new Scanner(in).useDelimiter("\\A").next();
 
                 Log.e("(" + responseCode + ")PostResponse", responseString);
                 return new JSONObject(responseString);
@@ -94,13 +94,13 @@ public class HttpClient {
     public static JSONArray postList(URL url, JSONObject data) throws IOException {
 
         try {
-            HttpURLConnection client = postClient(url, data);
+            HttpURLConnection       client              = postClient(url, data);
 
-            int responseCode = client.getResponseCode();
+            int                     responseCode        = client.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
-                InputStream in = new BufferedInputStream(client.getInputStream());
-                String responseString = new Scanner(in).useDelimiter("\\A").next();
+                InputStream         in                  = new BufferedInputStream(client.getInputStream());
+                String              responseString      = new Scanner(in).useDelimiter("\\A").next();
                 return new JSONArray(responseString);
             }
         } catch (JSONException e) {
@@ -112,7 +112,7 @@ public class HttpClient {
 
     private static HttpURLConnection postClient(URL url, JSONObject data) throws IOException {
 
-        HttpURLConnection client = (HttpURLConnection) url.openConnection();
+        HttpURLConnection       client      = (HttpURLConnection) url.openConnection();
 
         client.setRequestMethod("POST");
         client.setDoInput(true);
@@ -120,8 +120,8 @@ public class HttpClient {
         client.setRequestProperty("Content-Type", "application/json");
         client.setRequestProperty("Accept", "application/json");
 
-        OutputStream os = client.getOutputStream();
-        OutputStreamWriter writer = new OutputStreamWriter(client.getOutputStream());
+        OutputStream            os          = client.getOutputStream();
+        OutputStreamWriter      writer      = new OutputStreamWriter(client.getOutputStream());
         writer.write(data.toString());
         writer.flush();
         writer.close();
@@ -132,7 +132,7 @@ public class HttpClient {
 
     private static HttpURLConnection getClient(URL url) throws IOException {
 
-        HttpURLConnection client = (HttpURLConnection) url.openConnection();
+        HttpURLConnection       client      = (HttpURLConnection) url.openConnection();
 
         client.setRequestMethod("GET");
         client.setDoInput(true);

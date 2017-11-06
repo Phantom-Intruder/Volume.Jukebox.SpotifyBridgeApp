@@ -20,7 +20,7 @@ public class FirebaseService extends FirebaseMessagingService {
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.e(TAG, "ABC123: " + remoteMessage.getFrom());
 
-        com.spotify.sdk.android.player.PlaybackState state = MainActivity.mPlayer.getPlaybackState();
+        com.spotify.sdk.android.player.PlaybackState        state       = MainActivity.mPlayer.getPlaybackState();
 
         if ( state.isPlaying ) {
 
