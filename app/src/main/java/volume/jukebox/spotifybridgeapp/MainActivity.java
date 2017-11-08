@@ -1,5 +1,6 @@
 package volume.jukebox.spotifybridgeapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,15 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import volume.jukebox.spotifybridgeapp.APICallers.Authorization.GetAuthenticationToken;
+import volume.jukebox.spotifybridgeapp.Common.HttpClient;
+
 import static android.content.ContentValues.TAG;
 import static volume.jukebox.spotifybridgeapp.Common.Constants.*;
 
@@ -36,14 +46,14 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        startNewSong();
         Log.e(TAG, "ASDASDD "+ FirebaseInstanceId.getInstance().getToken());
 
         AuthenticationRequest.Builder       builder         = new AuthenticationRequest.Builder(CLIENT_ID,
                                                                                                 AuthenticationResponse.Type.TOKEN,
                                                                                                 REDIRECT_URI);
 
-        builder.setScopes(new String[]{SCOPES_READ, SCOPES_STREAM});
+        builder.setScopes(new String[]{SCOPES_READ});
 
         AuthenticationRequest               request         = builder.build();
 
@@ -109,10 +119,30 @@ public class MainActivity extends Activity implements
             case kSpPlaybackNotifyPlay:
                 setMetadata();
 
+            case kSpPlaybackNotifyAudioDeliveryDone:
+                startNewSong();
+
             default:
                 break;
 
         }
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void startNewSong() {
+
+        //Do request to API and receive track ID as response
+
+        new GetAuthenticationToken(){
+
+            @Override
+            public void onError(Exception exception) {
+
+                //TODO: Retry
+
+            }
+        }.execute();
 
     }
 
@@ -171,10 +201,13 @@ public class MainActivity extends Activity implements
             textView.setText(artistName);
 
         }catch (Exception e){
+
             final Handler           handler         = new Handler();
+
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+
                     Metadata        metadata        = mPlayer.getMetadata();
 
                     String          artistName      = metadata.currentTrack.name;
@@ -182,9 +215,13 @@ public class MainActivity extends Activity implements
                     TextView        textView        = findViewById(R.id.textView);
 
                     textView.setText(artistName);
+
                 }
+
             }, UPDATE_STREAM_TIME);
+
         }
+
     }
 
     public void stopStream(View view) {
