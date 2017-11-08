@@ -13,7 +13,7 @@ public class Constants {
 
     public static final String      API_URI                    = "http://172.18.0.118/Volume.Jukebox.API/api/";
 
-    public static final String      TRACK_URI                  = "Track";
+    public static final String      TRACK_URI                  = "Track?authorizationToken=BQC7-SvMoUm_pL0lnp6mK_AwUrTzNZ_FvyERv-mO4SoaxqfA6dt-1VKolB_2PqYvy1wfipGK0skbgo3hSSvqrw";
 
     public static final String      AUTHORIZE_URI              = "Authorize";
 

@@ -59,28 +59,11 @@ public abstract class GetAuthenticationToken extends AsyncTask<Token, String, Vo
 
         Gson                    gson                    = new GsonBuilder().create();
 
-        AuthenticationToken     authenticationToken     = gson.fromJson(response.toString(), AuthenticationToken.class);
+        Token                   authenticationToken     = gson.fromJson(response.toString(), Token.class);
 
         return authenticationToken.getToken();
 
     }
 
-}
-
-
-class AuthenticationToken
-{
-    private String token;
-
-    String getToken()
-    {
-        return token;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [token = "+token+"]";
-    }
 }
 

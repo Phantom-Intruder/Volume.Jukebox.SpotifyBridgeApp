@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import volume.jukebox.spotifybridgeapp.APICallers.Authorization.GetAuthenticationToken;
+import volume.jukebox.spotifybridgeapp.APICallers.Track.GetTrackId;
 import volume.jukebox.spotifybridgeapp.Common.HttpClient;
 
 import static android.content.ContentValues.TAG;
@@ -134,12 +135,9 @@ public class MainActivity extends Activity implements
 
         //Do request to API and receive track ID as response
 
-        new GetAuthenticationToken(){
-
+        new GetTrackId() {
             @Override
             public void onError(Exception exception) {
-
-                //TODO: Retry
 
             }
         }.execute();

@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import volume.jukebox.spotifybridgeapp.APICallers.Authorization.AuthenticationToken;
 import volume.jukebox.spotifybridgeapp.Common.Constants;
 import volume.jukebox.spotifybridgeapp.Common.HttpClient;
 import volume.jukebox.spotifybridgeapp.Common.Track;
@@ -39,7 +38,7 @@ public abstract class GetTrackId extends AsyncTask<Track, String, Void> {
 
             JSONObject      response        = HttpClient.get(url);
 
-            String          token           = deserializeResponse(response);
+            String          trackId         = deserializeResponse(response);
 
 
 
@@ -54,11 +53,11 @@ public abstract class GetTrackId extends AsyncTask<Track, String, Void> {
 
     private String deserializeResponse(JSONObject response){
 
-        Gson gson                    = new GsonBuilder().create();
+        Gson        gson                            = new GsonBuilder().create();
 
-        AuthenticationToken authenticationToken     = gson.fromJson(response.toString(), AuthenticationToken.class);
+        Track       track                            = gson.fromJson(response.toString(), Track.class);
 
-        return authenticationToken.getToken();
+        return track.getTrack();
 
     }
 
