@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -17,20 +19,19 @@ import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Metadata;
+import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import volume.jukebox.spotifybridgeapp.APICallers.Authorization.GetAuthenticationToken;
 import volume.jukebox.spotifybridgeapp.APICallers.Track.GetTrackId;
-import volume.jukebox.spotifybridgeapp.Common.HttpClient;
+import volume.jukebox.spotifybridgeapp.Common.Constants;
+import volume.jukebox.spotifybridgeapp.Common.SessionSingleton;
 
 import static android.content.ContentValues.TAG;
 import static volume.jukebox.spotifybridgeapp.Common.Constants.*;
@@ -39,7 +40,8 @@ public class MainActivity extends Activity implements
         SpotifyPlayer.NotificationCallback, ConnectionStateCallback
 {
 
-    public static Player mPlayer;
+    public static           Player          mPlayer;
+    private Timer           timer               = new Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +49,45 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        startNewSong();
+
+        startTokenTimer();
+
         Log.e(TAG, "ASDASDD "+ FirebaseInstanceId.getInstance().getToken());
 
         AuthenticationRequest.Builder       builder         = new AuthenticationRequest.Builder(CLIENT_ID,
                                                                                                 AuthenticationResponse.Type.TOKEN,
                                                                                                 REDIRECT_URI);
 
-        builder.setScopes(new String[]{SCOPES_READ});
+        builder.setScopes(new String[]{SCOPES_READ, SCOPES_STREAM});
 
         AuthenticationRequest               request         = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
+    }
+
+    private void startTokenTimer() {
+
+        TimerTask       hourlyTask          = new TimerTask() {
+
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            public void run () {
+
+                new GetAuthenticationToken() {
+
+                    @Override
+                    public void onError(Exception exception) {
+
+                    }
+
+                }.execute();
+
+            }
+
+        };
+
+        timer.schedule (hourlyTask, 0L, Constants.UPDATE_TOKEN_TIME);
     }
 
     @Override
@@ -80,14 +108,19 @@ public class MainActivity extends Activity implements
 
                     @Override
                     public void onInitialized(SpotifyPlayer spotifyPlayer) {
+
                         mPlayer                             = spotifyPlayer;
+
                         mPlayer.addConnectionStateCallback(MainActivity.this);
+
                         mPlayer.addNotificationCallback(MainActivity.this);
+
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
-                        Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
+                        Log.e(TAG, "Could not initialize player: " + throwable.getMessage());
+                        Toast.makeText(getApplicationContext(), "No work", Toast.LENGTH_SHORT).show();
                     }
 
                 });
@@ -118,29 +151,60 @@ public class MainActivity extends Activity implements
 
             // Handle event type as necessary
             case kSpPlaybackNotifyPlay:
+
                 setMetadata();
 
             case kSpPlaybackNotifyAudioDeliveryDone:
-                startNewSong();
+                startNewSongTimer();
 
             default:
+
                 break;
 
         }
 
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private void startNewSong() {
+    private void startNewSongTimer() {
 
-        //Do request to API and receive track ID as response
+        TimerTask       songTask          = new TimerTask() {
 
-        new GetTrackId() {
+            @SuppressLint("StaticFieldLeak")
             @Override
-            public void onError(Exception exception) {
+            public void run () {
+
+                startNewSong();
+                setMetadata();
 
             }
-        }.execute();
+
+        };
+
+            timer.schedule(songTask, 0L, SessionSingleton.getInstanceOfObject().getTrack().getTrackDuration());
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public static void startNewSong() {
+
+        if (!mPlayer.getPlaybackState().isPlaying){
+
+            //Do request to API and receive track ID as response
+            String s = SessionSingleton.getInstanceOfObject().getToken().getToken();
+
+            new GetTrackId() {
+
+                @Override
+
+                public void onError(Exception exception) {
+
+                    exception.printStackTrace();
+
+                }
+
+            }.execute(SessionSingleton.getInstanceOfObject().getToken());
+
+        }
 
     }
 
@@ -200,19 +264,30 @@ public class MainActivity extends Activity implements
 
         }catch (Exception e){
 
-            final Handler           handler         = new Handler();
+            final Handler           handler         = new Handler(Looper.getMainLooper());
 
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
 
-                    Metadata        metadata        = mPlayer.getMetadata();
 
-                    String          artistName      = metadata.currentTrack.name;
 
-                    TextView        textView        = findViewById(R.id.textView);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Metadata        metadata        = mPlayer.getMetadata();
 
-                    textView.setText(artistName);
+                            String          artistName      = metadata.currentTrack.name;
+
+                            Log.e(TAG, "sounds of "+ artistName);
+
+                            TextView        textView        = findViewById(R.id.textView);
+
+                            textView.setText(artistName);
+
+                        }
+                    });
+
 
                 }
 

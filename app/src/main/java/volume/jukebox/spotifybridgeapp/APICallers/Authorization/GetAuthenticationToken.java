@@ -1,5 +1,6 @@
 package volume.jukebox.spotifybridgeapp.APICallers.Authorization;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import java.net.URL;
 import volume.jukebox.spotifybridgeapp.Common.Constants;
 import volume.jukebox.spotifybridgeapp.Common.Constants.*;
 import volume.jukebox.spotifybridgeapp.Common.HttpClient;
+import volume.jukebox.spotifybridgeapp.Common.SessionSingleton;
 import volume.jukebox.spotifybridgeapp.Common.Token;
 import volume.jukebox.spotifybridgeapp.Common.Track;
 
@@ -38,13 +40,13 @@ public abstract class GetAuthenticationToken extends AsyncTask<Token, String, Vo
 
         try {
 
-            URL             url             = new URL(Constants.API_AUTHORIZE_URI);
+            URL                     url             = new URL(Constants.API_AUTHORIZE_URI);
 
-            JSONObject      response        = HttpClient.get(url);
+            JSONObject              response        = HttpClient.get(url);
 
-            String          token           = deserializeResponse(response);
+            SessionSingleton        session         = SessionSingleton.getInstanceOfObject();
 
-
+            session.setToken(deserializeResponse(response));
 
         } catch (MalformedURLException e) {
 
@@ -55,13 +57,11 @@ public abstract class GetAuthenticationToken extends AsyncTask<Token, String, Vo
         }
     }
 
-    private String deserializeResponse(JSONObject response){
+    private Token deserializeResponse(JSONObject response){
 
         Gson                    gson                    = new GsonBuilder().create();
 
-        Token                   authenticationToken     = gson.fromJson(response.toString(), Token.class);
-
-        return authenticationToken.getToken();
+        return gson.fromJson(response.toString(), Token.class);
 
     }
 

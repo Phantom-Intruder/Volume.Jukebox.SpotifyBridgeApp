@@ -5,10 +5,12 @@ package volume.jukebox.spotifybridgeapp.Common;
  */
 
 public class Token {
-    private String token;
+    private String       token;
 
     public String getToken() {
+
         return token;
+
     }
 
 }

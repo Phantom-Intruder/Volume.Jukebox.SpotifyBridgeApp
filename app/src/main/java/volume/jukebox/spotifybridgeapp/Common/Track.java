@@ -5,9 +5,20 @@ package volume.jukebox.spotifybridgeapp.Common;
  */
 
 public class Track {
-    private String track;
 
-    public String getTrack() {
-        return track;
+    private String      TrackId;
+
+    private int         TrackDuration;
+
+    public String getTrackId() {
+
+        return TrackId;
+
+    }
+
+    public int getTrackDuration() {
+
+        return TrackDuration;
+
     }
 }
