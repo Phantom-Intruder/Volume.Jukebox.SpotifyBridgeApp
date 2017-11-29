@@ -3,17 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="volume.jukebox.spotifybridgeapp.MainActivity">
-
+    tools:context="volume.jukebox.spotifybridgeapp.MainActivity"
+    android:background="@color/colorBackground">
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/stop_stream"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorAccent"
         android:onClick="stopStream"
+        android:text="@string/stop_stream"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="231dp" />
 
@@ -21,9 +22,23 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="106dp"
-        android:text="TextView" />
+        android:layout_centerVertical="true"
+        android:text="@string/song"
+        android:textColor="@color/colorText"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/colorText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:text="@string/volume_jukebox_v1_0"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textSize="30sp" />
 
 </RelativeLayout>

@@ -11,7 +11,7 @@ public class Constants {
 
     public static final String      REDIRECT_URI               = "http://localhost/Volume.Jukebox.Web/";
 
-    public static final String      API_URI                    = "http://172.18.0.118/Volume.Jukebox.API/api/";
+    public static final String      API_URI                    = "http://172.18.0.164/Volume.Jukebox.API/api/";
 
     public static final String      TRACK_URI                  = "Track?authorizationToken=";
 

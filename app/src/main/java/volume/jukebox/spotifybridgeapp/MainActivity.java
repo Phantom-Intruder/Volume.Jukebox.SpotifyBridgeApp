@@ -179,13 +179,19 @@ public class MainActivity extends Activity implements
             }
 
         };
+            try {
 
-            timer.schedule(songTask, 0L, SessionSingleton.getInstanceOfObject().getTrack().getTrackDuration());
+                timer.schedule(songTask, 0L, SessionSingleton.getInstanceOfObject().getTrack().getTrackDuration());
 
+            }catch (IllegalArgumentException e){
+
+                //TODO: No more people in the office
+
+            }
     }
 
     @SuppressLint("StaticFieldLeak")
-    public static void startNewSong() {
+    public static void startNewSong(){
 
         if (!mPlayer.getPlaybackState().isPlaying){
 
